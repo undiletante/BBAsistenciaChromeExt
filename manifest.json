@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Control de Asistencia en el Blackboard",
+  "name": "Scripts para el control de asistencia de Ciberctec",
   "version": "1.0",
-  "description": "Scripts que agilizan el control asistencia en la plataforma blackboard.",
+  "description": "Scripts que agilizan el control asistencia de las clases virtuales en Cibertec.",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"

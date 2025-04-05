@@ -1,6 +1,6 @@
 /********************************************************
  * Script para marcar la asistencia de los alumnos
- * en la plataforma Blackboard.
+ * en la plataforma de Cibertec.
  * Este script se ejecuta en el contexto de la
  * pestaña activa de Chrome.
  ********************************************************/
