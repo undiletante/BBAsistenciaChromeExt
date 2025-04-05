@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripts para el control de asistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="popup.js"></script>
+    <style>
+        .container {
+            max-width: 250px; 
+            width: 250px; 
+            margin: 20px auto;
+        }
+        button {
+            max-width: 60%;
+            border-radius: 5px;
+        }
+        h4 {
+            color: #fff !important;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        body {
+            background: linear-gradient(135deg, #007bff, #00c6ff); /* Degradado azul */
+            color: white; /* Texto blanco dentro del contenedor */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+        }
+    </style>
+</head>
+<body class="bg-light p-3">
+    <div class="container text-center">
+
+        <h4 class="mb-4 fs-6">Scripts de asistencia para el Blackboard</h4>
+
+        <button id="script1" class="btn btn-primary mb-3 py-1 fs-7" data-bs-toggle="tooltip" title="[En la pestaña donde está cargada la clase virtual] Recolecta y guarda la lista de alumnos que asistieron a la clase virtual.">Recolectar lista de alumnos</button>
+        
+        <button id="script2" class="btn btn-success mb-3 py-1 fs-7" data-bs-toggle="tooltip" title="En la pestaña donde está cargado el control de asistencia] Actualiza la asistencia de los alumnos recolectados.">Marcar asistencia</button>
+
+    </div>
+    <script src="bootstrap.bundle.min.js"></script>
+</body>
+</html>
