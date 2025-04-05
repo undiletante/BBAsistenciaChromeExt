@@ -154,7 +154,8 @@ function crearModal(participantes) {
   modalContent.appendChild(closeButton);
 
   const heading = document.createElement("h2");
-  heading.innerText = "Lista de Participantes";
+  // heading.innerText = "Lista de Participantes";
+  heading.innerText = `Lista de Alumnos (${participantes.length})`;
   modalContent.appendChild(heading);
 
   const textArea = document.createElement("textarea");
@@ -248,6 +249,7 @@ if (sidePanelOpen) {
       chrome.runtime.sendMessage(
         { action: "sendElements", participantes },
         (response) => {
+          document.querySelector("#side-panel-close").click();
           if (response && response.success) {
             console.log("Lista de alumnos enviada correctamente.");
           } else {
@@ -260,6 +262,7 @@ if (sidePanelOpen) {
       // Crea ventana modal y añade la lista de alumnos dentro de un textarea
       const modal = crearModal(participantes);
       showModal(modal);
+      
     });
   } else {
     participantsPanel = null;

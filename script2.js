@@ -97,7 +97,8 @@ function crearModal(participantes) {
   modalContent.appendChild(closeButton);
 
   const heading = document.createElement("h2");
-  heading.innerText = "Lista de Alumnos Pendientes";
+  //heading.innerText = "Lista de Alumnos Pendientes";
+  heading.innerText = `Lista de Alumnos Pendientes (${participantes.length})`;
   modalContent.appendChild(heading);
 
   const textArea = document.createElement("textarea");
