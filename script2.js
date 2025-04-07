@@ -5,8 +5,6 @@
  * pestaña activa de Chrome.
  ********************************************************/
 
-// TODO: verificar si el contenedor es correcto
-
 // Función para buscar un nombre en una lista de participantes
 function buscarNombreEnLista(nombre, lista) {
   return lista.some(
@@ -16,7 +14,9 @@ function buscarNombreEnLista(nombre, lista) {
 
 // Función para eliminar un nombre de la lista de participantes
 function eliminarNombreDeLista(nombre, lista) {
-  return lista.filter(participante => participante.toUpperCase() !== nombre.toUpperCase());
+  return lista.filter(
+    (participante) => participante.toUpperCase() !== nombre.toUpperCase()
+  );
 }
 
 // Crea una ventana modal.
@@ -173,20 +173,27 @@ function crearModal(participantes) {
   clearButton.onclick = function () {
     textArea.select();
 
-    // Actualiza los datos con un mensaje al background script    
+    // Actualiza los datos con un mensaje al background script
     const participantes = [];
-    chrome.runtime.sendMessage({ action: "sendElements", participantes }, (response) => {
-      if (response && response.success) {
-        heading.innerText = `Lista de alumnos no encontrados`;
-        console.log("Lista de alumnos no encontrados eliminada correctamente.");
-      } else {
-        console.error(response);
-        console.error("Error al eliminar la lista de alumnos no encontrados.");
+    chrome.runtime.sendMessage(
+      { action: "sendElements", participantes },
+      (response) => {
+        if (response && response.success) {
+          heading.innerText = `Lista de alumnos no encontrados`;
+          console.log(
+            "Lista de alumnos no encontrados eliminada correctamente."
+          );
+        } else {
+          console.error(response);
+          console.error(
+            "Error al eliminar la lista de alumnos no encontrados."
+          );
+        }
       }
-    });
+    );
 
     // Limpiar el textarea
-    textArea.value = ""; 
+    textArea.value = "";
   };
 
   // Cerrar el modal si alguien hace clic fuera de él
@@ -215,11 +222,9 @@ function showModal(modal) {
   modal.style.display = "block";
 }
 
-
 //  --------------------------------------------------
 // RUTINA
 //  --------------------------------------------------
-
 
 try {
   // Recupera la lista de alumnos no encontrados desde el almacenamiento local
@@ -227,24 +232,33 @@ try {
     .get("listaAlumnos")
     .then((data) => {
       let participantes = data.listaAlumnos || [];
-      const cantidadInicial = participantes.length; 
-      let mensaje = (participantes.length > 0) ? participantes.join("\n") : "No hay elementos guardados.";
+      const cantidadInicial = participantes.length;
+      let mensaje =
+        participantes.length > 0
+          ? participantes.join("\n")
+          : "No hay elementos guardados.";
 
       console.log("Lista de alumnos no encontrados:", mensaje);
+
+      // Seleccionar todas las filas que contienen los datos de los alumnos
+      const filas = document.querySelectorAll(
+        "#cphSite_gvAsistencia > tbody > tr"
+      );
+      // Si el registro de asistencia está vacío, mostrar un mensaje y salir
+      if (filas.length === 0) {
+        console.error(
+          "No se reconoce la página como el control de asistencia. No hay lista de alumnos."
+        );
+        alert(
+          "No se reconoce la página como el control de asistencia (no hay lista de alumnos)!"
+        );
+        return;
+      }
 
       // Si la lista de alumnos previamente recolectados está vacía, mostrar un mensaje y salir
       if (participantes.length === 0) {
         console.error("No se recolectó previamente la lista de alumnos.");
         alert("No se recolectó previamente la lista de alumnos.!");
-        return;
-      }
-
-      // Seleccionar todas las filas que contienen los datos de los alumnos
-      const filas = document.querySelectorAll("#cphSite_gvAsistencia > tbody > tr");
-      // Si el registro de asistencia está vacío, mostrar un mensaje y salir
-      if (filas.length === 0) {
-        console.error("No se reconoce la página como el control de asistencia. No hay lista de alumnos.");
-        alert("No se reconoce la página como el control de asistencia (no hay lista de alumnos)!");
         return;
       }
 
@@ -257,10 +271,14 @@ try {
           const apellidoPaterno = columnas[2].textContent.trim();
           const apellidoMaterno = columnas[3].textContent.trim();
           const nombres = columnas[4].textContent.trim();
-          nombre = `${nombres} ${apellidoPaterno} ${apellidoMaterno}`.replace(/\s+/g, " ").trim();
+          nombre = `${nombres} ${apellidoPaterno} ${apellidoMaterno}`
+            .replace(/\s+/g, " ")
+            .trim();
         }
 
-        const botonesAsistencia = columnas[0].querySelectorAll('input[type="radio"]'); // A T F N
+        const botonesAsistencia = columnas[0].querySelectorAll(
+          'input[type="radio"]'
+        ); // A T F N
         // Marca la asistencia si nombre está en la lista de participantes
         if (buscarNombreEnLista(nombre, participantes)) {
           botonesAsistencia[0].checked = true;
@@ -285,10 +303,14 @@ try {
         { action: "sendElements", participantes },
         (response) => {
           if (response && response.success) {
-            console.log("Lista de alumnos no encontrados enviada correctamente.");
+            console.log(
+              "Lista de alumnos no encontrados enviada correctamente."
+            );
           } else {
             console.error(response);
-            console.error("Error al enviar la lista de alumnos no encontrados.");
+            console.error(
+              "Error al enviar la lista de alumnos no encontrados."
+            );
           }
         }
       );
@@ -297,8 +319,8 @@ try {
       if (participantes.length > 0) {
         const modal = crearModal(participantes);
         showModal(modal);
-      } 
-      // Si no hay alumnos no encontrados, mostrar un mensaje      
+      }
+      // Si no hay alumnos no encontrados, mostrar un mensaje
       else if (cantidadInicial > 0) {
         alert("Asistencia completa.");
       }
