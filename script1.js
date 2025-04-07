@@ -277,6 +277,6 @@ if (sidePanelOpen) {
   }
 } else {
   sidePanel = null;
-  console.error("Error: no se encontró el panel lateral.");
-  alert("Error: no se encontró el panel lateral!");
+  console.error("Error: no se reconoce la página como una clase virtual.");
+  alert("Error: no se reconoce la página como una clase virtual!");
 }

@@ -14,6 +14,10 @@
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "host_permissions": [
+    "https://gestiondocente.cibertec.edu.pe/Academico/secure/Asistencia.aspx",
+    "https://us.bbcollab.com/collab/ui/session/join/*"
+  ]
 }
   

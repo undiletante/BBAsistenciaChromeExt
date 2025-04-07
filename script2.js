@@ -234,7 +234,8 @@ try {
 
       // Si la lista de alumnos está vacía, mostrar un mensaje y salir
       if (participantes.length === 0) {
-        alert("No hay una lista de alumnos recolectada.");
+        console.error("No se reconoce la página como el control de asistencia. No hay lista de alumnos.");
+        alert("No se reconoce la página como el control de asistencia (no hay lista de alumnos)!");
         return;
       }
 

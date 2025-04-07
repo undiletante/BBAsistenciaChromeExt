@@ -19,25 +19,17 @@ async function getActiveTabId() {
 //  --------------------------------------------------
 
 
-// Recupera la cantidad de alumnos desde chrome.storage.local
-  // y actualiza el texto del botón de marcar asistencia
+
 document.addEventListener("DOMContentLoaded", () => {  
+  // Recupera la cantidad de alumnos desde chrome.storage.local
+  // y actualiza el texto del botón de marcar asistencia
   chrome.storage.local.get("cantidadAlumnos", (result) => {
-    const cantidad = result.cantidadAlumnos || -1; // Si no hay datos, usa -1
+    const cantidad = result.cantidadAlumnos || 0;
     const botonMarcar = document.getElementById("script2");
-    if (botonMarcar && cantidad !== -1) {
+    if (botonMarcar && cantidad > 0) {
       botonMarcar.textContent = `Marcar asistencia (${cantidad})`;
     } else {
       botonMarcar.textContent = `Marcar asistencia`;
-      // Eliminar los datos de cantidadAlumnos después de recuperarlos
-      chrome.storage.local
-        .remove("cantidadAlumnos")
-        .then(() => {
-          console.log("[popup.js] 'cantidadAlumnos' se eliminó del almacenamiento local.");
-        })
-        .catch((error) => {
-          console.error(`[popup.js] Error al eliminar 'cantidadAlumnos': ${error}`);
-        });
     }
   });
 
@@ -71,13 +63,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Tooltip de Bootstrap
-  const tooltipTriggerList = [].slice.call(
-    document.querySelectorAll('[data-bs-toggle="tooltip"]')
-  );
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
+
+  // Obtener la pestaña activa
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const url = tabs[0].url; // URL de la pestaña activa
+    console.log("URL actual:", url);
+
+    // Habilitar o deshabilitar botones según la URL
+    if (url.startsWith("https://us.bbcollab.com/collab/ui/session/join/")) {
+        botonRecolectar.disabled = false;
+    } else {
+        botonRecolectar.disabled = true;
+    }
+
+    if (url === "https://gestiondocente.cibertec.edu.pe/Academico/secure/Asistencia.aspx") {
+        botonMarcar.disabled = false;
+    } else {
+        botonMarcar.disabled = true; 
+    }
+  });
 });
+
+
 
 // Escucha mensajes enviados desde otros scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
