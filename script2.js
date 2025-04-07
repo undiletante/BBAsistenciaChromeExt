@@ -5,6 +5,20 @@
  * pestaña activa de Chrome.
  ********************************************************/
 
+// TODO: verificar si el contenedor es correcto
+
+// Función para buscar un nombre en una lista de participantes
+function buscarNombreEnLista(nombre, lista) {
+  return lista.some(
+    (participante) => participante.toUpperCase() === nombre.toUpperCase()
+  );
+}
+
+// Función para eliminar un nombre de la lista de participantes
+function eliminarNombreDeLista(nombre, lista) {
+  return lista.filter(participante => participante.toUpperCase() !== nombre.toUpperCase());
+}
+
 // Crea una ventana modal.
 // Recibe un array de participantes y lo añade a un textarea [modal]
 function crearModal(participantes) {
@@ -12,75 +26,86 @@ function crearModal(participantes) {
   const style = document.createElement("style");
   style.id = "temp_estilo";
   style.innerHTML = `
-          .modal {
-              display: none;
-              position: fixed;
-              z-index: 1;
-              left: 0;
-              top: 0;
-              width: 100%;
-              height: 100%;
-              overflow: auto;
-              background-color: rgba(0, 0, 0, 0.4);
-              padding-top: 60px;
-          }
-  
-          .modal-content {
-              background-color: #fefefe;
-              margin: 5% auto;
-              padding: 20px;
-              border: 1px solid #888;
-              width: 80%;
-          }
-  
-          .close {
-              color: #aaa;
-              float: right;
-              font-size: 28px;
-              font-weight: bold;
-          }
-  
-          .close:hover,
-          .close:focus {
-              color: black;
-              text-decoration: none;
-              cursor: pointer;
-          }
-  
-          textarea {
-              width: 100%;
-              height: 200px;
-              margin-bottom: 10px;
-          }
-  
-          .button-container {
-              display: flex;
-              justify-content: space-between;
-              margin-top: 20px;
-          }
-  
-          .button-container button {
-              padding: 10px 20px;
-              font-size: 16px;
-              border: none;
-              border-radius: 5px;
-              cursor: pointer;
-          }
-  
-          .button-container button:hover {
-              opacity: 0.9;
-          }
-  
-          .button-container button:first-child {
-              background-color: #007bff; /* Azul para el botón "Copiar lista" */
-              color: white;
-          }
-  
-          .button-container button:last-child {
-              background-color: #dc3545; /* Rojo para el botón "Cerrar" */
-              color: white;
-          }
-      `;
+  .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+  }
+
+  .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+  }
+
+  .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+  }
+
+  textarea {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 10px;
+  }
+
+  .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+  }
+
+  .button-container button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .button-container button:hover {
+      opacity: 0.9;
+  }
+
+  .button-container button:first-child {
+      background-color: #007bff; /* Azul para el botón "Copiar al portapapeles" */
+      color: white;
+  }
+
+  .button-container button:last-child {
+      background-color: #dc3545; /* Rojo para el botón "Cerrar" */
+      color: white;
+  }
+
+  /* Estilo específico para el botón clearButton */
+  .button-container button:nth-child(2) {
+      background-color: #ffc107; /* Amarillo para el botón "Borrar lista" */
+      color: black;
+      font-weight: bold;
+  }
+
+  .button-container button:nth-child(2):hover {
+      background-color: #e0a800; /* Un tono más oscuro al pasar el mouse */
+  }
+`;
   document.head.appendChild(style);
 
   // Crear la ventana modal
@@ -97,8 +122,7 @@ function crearModal(participantes) {
   modalContent.appendChild(closeButton);
 
   const heading = document.createElement("h2");
-  //heading.innerText = "Lista de Alumnos Pendientes";
-  heading.innerText = `Lista de Alumnos Pendientes (${participantes.length})`;
+  heading.innerText = `Lista de alumnos no encontrados (${participantes.length})`;
   modalContent.appendChild(heading);
 
   const textArea = document.createElement("textarea");
@@ -111,8 +135,12 @@ function crearModal(participantes) {
   buttonContainer.className = "button-container";
 
   const copyButton = document.createElement("button");
-  copyButton.innerText = "Copiar lista";
+  copyButton.innerText = "Copiar al portapapeles";
   buttonContainer.appendChild(copyButton);
+
+  const clearButton = document.createElement("button");
+  clearButton.innerText = "Borrar lista";
+  buttonContainer.appendChild(clearButton);
 
   const closeModalButton = document.createElement("button");
   closeModalButton.innerText = "Cerrar";
@@ -139,6 +167,24 @@ function crearModal(participantes) {
     textArea.select();
     document.execCommand("copy");
     alert("Lista copiada al portapapeles!");
+  };
+
+  // Función para borrar la lista
+  clearButton.onclick = function () {
+    textArea.select();
+    // Solicitar el proceso de limpieza al background script
+    chrome.runtime.sendMessage({ action: "clearElements" }, (response) => {
+      if (response && response.success) {
+        heading.innerText = `Lista de alumnos no encontrados`;
+        console.log("Lista de alumnos no encontrados eliminada correctamente.");
+      } else {
+        console.error(response);
+        console.error("Error al eliminar la lista de alumnos no encontrados.");
+      }
+    });
+
+    // Actualizar el botón del popup
+    textArea.value = ""; // Limpiar el textarea
   };
 
   // Cerrar el modal si alguien hace clic fuera de él
@@ -168,38 +214,78 @@ function showModal(modal) {
 }
 
 try {
-  // Recupera la lista de alumnos pendientes desde el almacenamiento local
+  // Recupera la lista de alumnos no encontrados desde el almacenamiento local
   chrome.storage.local
     .get("listaAlumnos")
     .then((data) => {
       let participantes = data.listaAlumnos || [];
-      let mensaje = participantes.length > 0 ? participantes.join("\n") : "No hay elementos guardados.";
+      const cantidadInicial = participantes.length; 
+      let mensaje = (participantes.length > 0) ? participantes.join("\n") : "No hay elementos guardados.";
 
-      alert(`Lista de alumnos: ${mensaje}`);
-      console.log("Lista de alumnos:", participantes);
+      console.log("Lista de alumnos no encontrados:", mensaje);
 
-      // TODO: Lógica para marcar la asistencia en la plataforma deseada.
-      // Cuando se realice el proceso más de una vez, solo se debe marcar asistencia a los alumnos que no tienen asistencia marcada.
-      // Se debe conservar la lista de alumnos pendientes
+      // Si la lista de alumnos está vacía, mostrar un mensaje y salir
+      if (participantes.length === 0) {
+        alert("No hay alumnos no encontrados.");
+        return;
+      }
 
+      // Seleccionar todas las filas que contienen los datos de los alumnos
+      const filas = document.querySelectorAll("#cphSite_gvAsistencia > tbody > tr");
+      console.log(filas.length);
+      filas.forEach((fila) => {
+        const columnas = fila.querySelectorAll(":scope > td");
 
-      // Enviar la lista de alumnos pendientes al background script
+        // Extraer nombres y apellidos
+        let nombre = "";
+        if (columnas.length > 5) {
+          const apellidoPaterno = columnas[2].textContent.trim();
+          const apellidoMaterno = columnas[3].textContent.trim();
+          const nombres = columnas[4].textContent.trim();
+          nombre = `${nombres} ${apellidoPaterno} ${apellidoMaterno}`.replace(/\s+/g, " ").trim();
+        }
+
+        const botonesAsistencia = columnas[0].querySelectorAll('input[type="radio"]'); // A T F N
+        // Marca la asistencia si nombre está en la lista de participantes
+        if (buscarNombreEnLista(nombre, participantes)) {
+          botonesAsistencia[0].checked = true;
+          //participantes = eliminarNombreDeLista(nombre, participantes);
+        }
+        // Si la asistencia no tiene estado o es NINGUNO se marca FALTA
+        else {
+          if (
+            botonesAsistencia[3].checked === true ||
+            (botonesAsistencia[0].checked === false &&
+              botonesAsistencia[1].checked === false &&
+              botonesAsistencia[2].checked === false &&
+              botonesAsistencia[3].checked === false)
+          ) {
+            botonesAsistencia[2].checked = true; // Marca la asistencia como FALTA
+          }
+        }
+      });
+
+      // Enviar la lista de alumnos no encontrados al background script
       chrome.runtime.sendMessage(
         { action: "sendPendings", participantes },
         (response) => {
           if (response && response.success) {
-            console.log("Lista de alumnos pendientes enviada correctamente.");
+            console.log("Lista de alumnos no encontrados enviada correctamente.");
           } else {
             console.error(response);
-            console.error("Error al enviar la lista de alumnos pendientes.");
+            console.error("Error al enviar la lista de alumnos no encontrados.");
           }
         }
       );
 
-      // Si hay alumnos pendientes mostrar un modal
+      // Si hay alumnos no encontrados mostrar un modal
       if (participantes.length > 0) {
         const modal = crearModal(participantes);
         showModal(modal);
+      } 
+      // Si no hay alumnos no encontrados, mostrar un mensaje      
+      else if (cantidadInicial > 0) {
+        alert("Asistencia completa.");
       }
     })
     .catch((error) => {

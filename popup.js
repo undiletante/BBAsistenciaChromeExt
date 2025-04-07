@@ -21,10 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
       chrome.storage.local
         .remove("cantidadAlumnos")
         .then(() => {
-          console.log("'cantidadAlumnos' se eliminó del almacenamiento local.");
+          console.log("[popup.js] 'cantidadAlumnos' se eliminó del almacenamiento local.");
         })
         .catch((error) => {
-          console.error(`Error al eliminar 'cantidadAlumnos': ${error}`);
+          console.error(`[popup.js] Error al eliminar 'cantidadAlumnos': ${error}`);
         });
     }
   });
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         files: ["script1.js"],
       });
     } else {
-      console.error("No se encontró una pestaña activa.");
+      console.error("[popup.js] No se encontró una pestaña activa.");
       alert("No se encontró una pestaña activa.");
     }
   });
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         files: ["script2.js"],
       });
     } else {
-      console.error("No se encontró una pestaña activa.");
+      console.error("[popup.js] No se encontró una pestaña activa.");
       alert("No se encontró una pestaña activa.");
     }
   });
@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "actualizaBotonMarcar") {
     // Recupera la cantidad de alumnos
     const cantidad = message.cantidad || [];
-    console.log("Cantidad de alumnos recibidos:", cantidad);
+    console.log("[popup.js] Cantidad de alumnos recibidos:", cantidad);
 
     // Actualizar el boton de marcar asistencia con la cantidad de alumnos
     const botonMarcar = document.getElementById("script2");

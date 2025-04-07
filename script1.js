@@ -129,7 +129,7 @@ function crearModal(participantes) {
         }
 
         .button-container button:first-child {
-            background-color: #007bff; /* Azul para el botón "Copiar lista" */
+            background-color: #007bff; /* Azul para el botón "Copiar al portapapeles" */
             color: white;
         }
 
@@ -155,7 +155,7 @@ function crearModal(participantes) {
 
   const heading = document.createElement("h2");
   // heading.innerText = "Lista de Participantes";
-  heading.innerText = `Lista de Alumnos (${participantes.length})`;
+  heading.innerText = `Lista de alumnos (${participantes.length})`;
   modalContent.appendChild(heading);
 
   const textArea = document.createElement("textarea");
@@ -168,7 +168,7 @@ function crearModal(participantes) {
   buttonContainer.className = "button-container";
 
   const copyButton = document.createElement("button");
-  copyButton.innerText = "Copiar lista";
+  copyButton.innerText = "Copiar al portapapeles";
   buttonContainer.appendChild(copyButton);
 
   const closeModalButton = document.createElement("button");
