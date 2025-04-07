@@ -49,7 +49,10 @@
 
         i.help-icon:hover, .github-icon i:hover {
             color: forestgreen;
-            /* Cambia a un gris claro al pasar el mouse */
+        }
+
+        .tooltip {
+            font-size: small;
         }
     </style>
 </head>
@@ -65,9 +68,8 @@
 
         <!-- Ícono de ayuda con tooltip -->
         <div class="mt-1 text-end">
-            <i class="help-icon bi bi-question-circle" data-bs-toggle="tooltip" data-bs-html="true" title="[1] En la página de la clase virtual, recolecta automáticamente la lista de alumnos asistentes. <br /><br />
-            <b>[2] En la página del registro de asistencia, marca automáticamente la asistencia de los alumnos recolectados. <br /><br />
-            Nota: Los botones solo están habilitados en las páginas correspondientes."
+            <i class="help-icon bi bi-question-circle" data-bs-toggle="tooltip" data-bs-html="true" title="[1] En la página de la clase virtual, recolecta automáticamente la lista de alumnos asistentes con el primer botón. <br /><br />
+            [2] En la página del registro de asistencia, marca automáticamente la asistencia de los alumnos recolectados con el segundo botón."
             style="text-align: left;"></i>
             &nbsp;&nbsp;
             <a href="https://github.com/waykuq/BBAsistenciaChromeExt" target="_blank" class="github-icon"
