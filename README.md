@@ -25,7 +25,7 @@ Extensión para el control de asistencia en clases virtuales de Cibertec.
 
 1. Instala la extensión siguiendo los pasos de la sección **Instalación**.
 2. Abre la extensión desde la barra de herramientas de Chrome.
-3. Sigue las instrucciones en el popup para recolectar y gestionar la asistencia.
+3. Sigue las instrucciones en el popup para gestionar la asistencia.
 
 ## Contribuciones
 

@@ -13,14 +13,12 @@ async function getActiveTabId() {
   return tabs.length ? tabs[0].id : null;
 }
 
-
 //  --------------------------------------------------
 // RUTINA
 //  --------------------------------------------------
 
 
-
-document.addEventListener("DOMContentLoaded", () => {  
+document.addEventListener("DOMContentLoaded", async () => {
   // Recupera la cantidad de alumnos desde chrome.storage.local
   // y actualiza el texto del botón de marcar asistencia
   chrome.storage.local.get("cantidadAlumnos", (result) => {
@@ -63,32 +61,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Tooltip de Bootstrap
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
   tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
-
-  // Obtener la pestaña activa
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const url = tabs[0].url; // URL de la pestaña activa
-    console.log("URL actual:", url);
-
-    // Habilitar o deshabilitar botones según la URL
-    if (url.startsWith("https://us.bbcollab.com/collab/ui/session/join/")) {
-        botonRecolectar.disabled = false;
-    } else {
-        botonRecolectar.disabled = true;
-    }
-
-    if (url === "https://gestiondocente.cibertec.edu.pe/Academico/secure/Asistencia.aspx") {
-        botonMarcar.disabled = false;
-    } else {
-        botonMarcar.disabled = true; 
-    }
-  });
+  });  
 });
-
-
 
 // Escucha mensajes enviados desde otros scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -101,7 +80,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const botonMarcar = document.getElementById("script2");
     if (botonMarcar) {
       botonMarcar.textContent = "Marcar asistencia";
-      botonMarcar.textContent += (cantidad > 0) ? ` (${cantidad})` : "";
+      botonMarcar.textContent += cantidad > 0 ? ` (${cantidad})` : "";
     }
     sendResponse({ success: true });
   }

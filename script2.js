@@ -232,16 +232,22 @@ try {
 
       console.log("Lista de alumnos no encontrados:", mensaje);
 
-      // Si la lista de alumnos está vacía, mostrar un mensaje y salir
+      // Si la lista de alumnos previamente recolectados está vacía, mostrar un mensaje y salir
       if (participantes.length === 0) {
-        console.error("No se reconoce la página como el control de asistencia. No hay lista de alumnos.");
-        alert("No se reconoce la página como el control de asistencia (no hay lista de alumnos)!");
+        console.error("No se recolectó previamente la lista de alumnos.");
+        alert("No se recolectó previamente la lista de alumnos.!");
         return;
       }
 
       // Seleccionar todas las filas que contienen los datos de los alumnos
       const filas = document.querySelectorAll("#cphSite_gvAsistencia > tbody > tr");
-      console.log(filas.length);
+      // Si el registro de asistencia está vacío, mostrar un mensaje y salir
+      if (filas.length === 0) {
+        console.error("No se reconoce la página como el control de asistencia. No hay lista de alumnos.");
+        alert("No se reconoce la página como el control de asistencia (no hay lista de alumnos)!");
+        return;
+      }
+
       filas.forEach((fila) => {
         const columnas = fila.querySelectorAll(":scope > td");
 
