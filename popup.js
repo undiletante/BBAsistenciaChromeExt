@@ -7,9 +7,21 @@
  *  Actualiza el botón del popup
  ********************************************************/
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Recupera la cantidad de alumnos desde chrome.storage.local
+// Función para obtener el ID de la pestaña activa
+async function getActiveTabId() {
+  let tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  return tabs.length ? tabs[0].id : null;
+}
+
+
+//  --------------------------------------------------
+// RUTINA
+//  --------------------------------------------------
+
+
+// Recupera la cantidad de alumnos desde chrome.storage.local
   // y actualiza el texto del botón de marcar asistencia
+document.addEventListener("DOMContentLoaded", () => {  
   chrome.storage.local.get("cantidadAlumnos", (result) => {
     const cantidad = result.cantidadAlumnos || -1; // Si no hay datos, usa -1
     const botonMarcar = document.getElementById("script2");
@@ -66,12 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 });
-
-// Función para obtener el ID de la pestaña activa
-async function getActiveTabId() {
-  let tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tabs.length ? tabs[0].id : null;
-}
 
 // Escucha mensajes enviados desde otros scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

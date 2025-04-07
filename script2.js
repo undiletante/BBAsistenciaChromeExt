@@ -172,8 +172,10 @@ function crearModal(participantes) {
   // Función para borrar la lista
   clearButton.onclick = function () {
     textArea.select();
-    // Solicitar el proceso de limpieza al background script
-    chrome.runtime.sendMessage({ action: "clearElements" }, (response) => {
+
+    // Actualiza los datos con un mensaje al background script    
+    const participantes = [];
+    chrome.runtime.sendMessage({ action: "sendElements", participantes }, (response) => {
       if (response && response.success) {
         heading.innerText = `Lista de alumnos no encontrados`;
         console.log("Lista de alumnos no encontrados eliminada correctamente.");
@@ -183,8 +185,8 @@ function crearModal(participantes) {
       }
     });
 
-    // Actualizar el botón del popup
-    textArea.value = ""; // Limpiar el textarea
+    // Limpiar el textarea
+    textArea.value = ""; 
   };
 
   // Cerrar el modal si alguien hace clic fuera de él
@@ -213,6 +215,12 @@ function showModal(modal) {
   modal.style.display = "block";
 }
 
+
+//  --------------------------------------------------
+// RUTINA
+//  --------------------------------------------------
+
+
 try {
   // Recupera la lista de alumnos no encontrados desde el almacenamiento local
   chrome.storage.local
@@ -226,7 +234,7 @@ try {
 
       // Si la lista de alumnos está vacía, mostrar un mensaje y salir
       if (participantes.length === 0) {
-        alert("No hay alumnos no encontrados.");
+        alert("No hay una lista de alumnos recolectada.");
         return;
       }
 
@@ -249,7 +257,7 @@ try {
         // Marca la asistencia si nombre está en la lista de participantes
         if (buscarNombreEnLista(nombre, participantes)) {
           botonesAsistencia[0].checked = true;
-          //participantes = eliminarNombreDeLista(nombre, participantes);
+          participantes = eliminarNombreDeLista(nombre, participantes);
         }
         // Si la asistencia no tiene estado o es NINGUNO se marca FALTA
         else {
@@ -267,7 +275,7 @@ try {
 
       // Enviar la lista de alumnos no encontrados al background script
       chrome.runtime.sendMessage(
-        { action: "sendPendings", participantes },
+        { action: "sendElements", participantes },
         (response) => {
           if (response && response.success) {
             console.log("Lista de alumnos no encontrados enviada correctamente.");

@@ -224,6 +224,12 @@ function showModal(modal) {
   modal.style.display = "block";
 }
 
+
+//  --------------------------------------------------
+// RUTINA
+//  --------------------------------------------------
+
+
 // Abrir el panel lateral
 // Verificar si la variable 'sidePanel' existe
 if (typeof sidePanel === "undefined" || sidePanel === null) {
