@@ -6,8 +6,7 @@ Extensión para el control de asistencia en clases virtuales de Cibertec.
 
 - Recolecta automáticamente la lista de alumnos presentes en las clases virtuales.
 - Genera un modal con la lista de alumnos para su revisión.
-- Permite guardar y sincronizar los datos de asistencia.
-- *Marca la asistencia en la plataforma de Cibertec.
+- Marca la asistencia en la plataforma de Cibertec.
 
 ## Requisitos
 
